@@ -1,0 +1,255 @@
+
+#include <stdio.h>
+#include<stdlib.h>
+
+int flag = -1;
+struct node
+{
+int info;
+struct node *left;
+struct node *right;
+}
+*root = NULL, *ptr;
+
+struct node *newNode(int item)
+{
+struct node *temp = (struct node *)malloc(sizeof(struct node));
+temp->info = item;
+temp->left = temp->right = NULL;
+return temp;
+}
+
+void inorder(struct node *root)
+{
+
+if (root == NULL)
+return;
+else
+{
+inorder(root->left);
+    printf("%d ", root->info);
+    inorder(root->right);
+  }
+}
+
+void preorder(struct node* root)
+{
+if (root == NULL)
+return;
+else
+{
+printf("%d ", root->info);
+preorder(root->left);
+preorder(root->right);
+}
+}
+
+void postorder(struct node* root)
+{
+if (root == NULL)
+return;
+else
+{
+postorder(root->left);
+postorder(root->right);
+printf("%d ", root->info);
+}
+}
+
+void display(struct node* root)
+{
+  int option = -1;
+  do
+  {
+    printf("\nEnter your option\n");
+  printf("\n1.Inorder traversal\n");
+  printf("2.Preorder traversal\n");
+  printf("3.Postorder traversal\n");
+  printf("4.Return to previous menu\n");
+ 
+  scanf("%d", &option);
+  switch(option)
+  {
+  case 1:
+  inorder(root);
+  break;
+  case 2:
+  preorder(root);
+  break;
+  case 3:
+  postorder(root);
+  break;
+  case 4:
+  return;
+  default:
+  printf("The entered option is Invalid\n");
+  }
+  }while(option != 0);
+}
+
+struct node *insert(struct node *node, int key)
+{
+if (node == NULL)
+  return newNode(key);
+else
+{
+  if (key < node->info)
+    node->left = insert(node->left, key);
+  else
+    node->right = insert(node->right, key);
+  return node;
+}
+}
+
+struct node *parentnode(struct node* root, int key)
+{
+struct node* par = NULL;
+  while(root!=NULL && root->info!=key){
+    par = root;
+    if(key < root->info)
+      root = root->left;
+    else
+      root = root->right;
+  }
+  return par;
+}
+
+int height(struct node* root)
+{
+    if (root == NULL)
+        return -1;
+    else
+    {
+        int lHeight = height(root->left);
+        int rHeight = height(root->right);
+
+        if (lHeight > rHeight)
+          return(lHeight + 1);
+        else
+       return(rHeight + 1);
+    }
+}
+
+struct node *inorder_succesor(struct node *node)
+{
+  struct node *current = node->right;
+  while (current && current->left != NULL)
+    current = current->left;
+  return current;
+}
+
+struct node *search(struct node *root, int key)
+{
+if (root == NULL)
+{
+      flag = 0;
+return NULL ;
+return NULL ;
+}
+
+if (key == root->info)
+return root;
+   
+if (root->info > key && flag == -1)
+    return search(root->left, key);
+ 
+if (root->info < key && flag == -1)
+return search(root->right, key);
+
+}
+
+int delete(struct node *ptr, int key)
+{
+struct node *x, *y, *z, *par;
+z = search(ptr, key);
+if (z == NULL)
+return -1;
+
+if (z->left == NULL || z->right == NULL)
+y = z;
+else
+y = inorder_succesor(z);
+
+if( y->left != NULL)
+x = y->left;
+else
+x = y->right;
+
+par = parentnode(ptr, y->info);
+
+if(par == NULL)
+{
+root = x;
+free(y);
+return 1;
+}
+
+if (par->left == y)
+par->left = x;
+else
+par->right = x;
+
+if (y != z)
+z->info = y->info;
+free(y);
+return 1;
+}
+
+int main()
+{
+  int key,f;
+struct node *O;
+  int option = -1;
+  do
+  {
+  printf("\nEnter your option\n");
+  printf("\n\n1.Insert into tree\n");
+  printf("2.Dsiplay the tree\n");
+  printf("3.Search for element\n");
+  printf("4.Delete an element\n");
+  printf("5.Height of tree\n");
+  printf("6.Exit\n");
+  
+  scanf("%d", &option);
+  switch(option)
+  {
+  case 1:
+  printf("\nEnter the value to be inserted\n");
+  scanf("%d", &key);
+  root = insert(root,key);
+  break;
+  case 2:
+printf("\nDisplaying the tree\n");
+  display(root);
+  break;
+  case 3:
+printf("\nEnter the value to be searched\n");
+scanf("%d",&key);
+  O = search(root, key);
+if(O == NULL)
+printf("The element you have searched for is not found in the tree");
+else
+printf("The element is found");
+  break;
+  case 4:
+printf("\nEnter the value to be Deleted\n");
+scanf("%d",&key);
+  f = delete(root, key);
+if(f == -1)
+printf("The element you are trying to delete is not found in the tree\n");
+else
+printf("The element is deleted\n");
+break;
+case 5:
+printf("The height of the tree is %d\n", height(root));
+break;
+case 6:
+exit(0);
+ 
+  default:
+  printf("The entered option is Invalid, please try again\n");
+  }
+  }while(option != 0);
+  return 0;
+}
+
