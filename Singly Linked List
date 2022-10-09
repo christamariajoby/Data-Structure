@@ -1,0 +1,150 @@
+#include <stdio.h>
+#include<stdlib.h>
+struct node
+{
+   int info;
+   struct node *link;
+}*head=NULL,*temp,*rear;
+void push();
+void pop();
+void print();
+void enqueu();
+void dequeu();
+void push()
+{
+  int item;
+  temp=(struct node *)malloc(sizeof(struct node));
+  printf("Enter the item you want to be inserted");
+  scanf("%d",&item);
+  temp->info=item;
+  temp->link=head;
+  head=temp;
+}
+void pop()
+{
+  int item;
+  if(head==NULL)
+  {
+    printf("there is no item to be deleted");
+  }
+  else
+  {
+    item=head->info;
+    temp=head;
+    head=head->link;
+    free(temp);
+    printf("The item deleted is %d",item);
+    
+  }
+}
+void print()
+{
+  struct node * m;
+  int j;
+  m=head;
+  if(m==NULL)
+  {
+    printf("There is no element to print");
+  }
+  else
+  {
+      while(m!=NULL)
+      {
+        j=m->info;
+        printf("\t%d",j);
+        m=m->link;
+      }      
+  }
+}
+void enqueu()
+{
+  int item;
+  temp=(struct node *)malloc(sizeof(struct node));
+  printf("Enter the item you want to be inserted");
+  scanf("%d",&item);
+  temp->info=item;
+  temp->link=NULL;
+  if(rear==NULL)
+  {
+    head=rear=temp;
+  }
+  else
+  {
+    rear->link=temp;
+    rear=temp;
+  }
+}
+void dequeu()
+{
+  int item;
+  if(head==NULL)
+  {
+    printf("ther is no item to be deleted");
+  }
+  else
+  {
+      item=head->info;
+      temp=head;
+      if(head->link==NULL)
+      {
+        head=rear=NULL;
+      }
+      else 
+      {
+        head=head->link;
+      }
+      free(temp);
+      printf("The item deleted is %d",item);
+  }    
+}
+int main()
+{
+  int j,k,l;
+  do
+  {
+        printf("\n\t CHOOSE\nFor stack press 1\nFor queu press2\nFor printing press 3\nFor exiting press 4");
+        scanf("%d",&j);
+        if(j==1)
+        {
+          do
+          {
+            printf("\n\t STACK\nFor insertion press 1\nFor deletion press2\nFor exiting -3");
+            scanf("%d",&k);
+            switch(k)
+            {
+              case 1:push();
+                    break;
+              case 2:pop();
+                    break;
+              case 3:break;              
+
+            }
+          }while(k!=3);  
+        }
+        else if(j==2)
+        {
+          do
+          {
+            printf("\n\t QUEU\nFor insertion press 1\nFor deletion press2\nFor exiting -3");
+            scanf("%d",&l);
+            switch(l)
+            {
+              case 1:enqueu();
+                    break;
+              case 2:dequeu();
+                    break;
+              case 3:break;              
+
+            }
+          }while(l!=3);  
+        }
+        else if(j==3)
+        {
+          print();
+        }
+        else if(j==4)
+        {
+          exit(0);
+        }
+  }while(j!=4);    
+ }
