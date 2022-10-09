@@ -1,0 +1,84 @@
+#include <stdio.h>
+
+void Merge(int a[], int beg, int mid, int end)
+{
+  int i,j,k;
+  int n1= mid-beg+1;
+  int n2= end-mid;
+
+  int Leftarr[n1];
+  int Rightarr[n2];
+
+  for(int i=0;i<n1;i++)
+  Leftarr[i]=a[beg+i];
+  for(int j=0;j<n2;j++)
+  Rightarr[j]=a[mid+1+j];
+  i=0;
+  j=0;
+  k=beg;
+
+  while(i<n1 && j<n2)
+    {
+      if(Leftarr[i]<=Rightarr[j])
+      { a[k]=Leftarr[i];
+        i++;
+      }
+      else 
+      { a[k]=Rightarr[j];
+        j++;
+      } k++;
+    }
+  while(i<n1)
+    {
+      a[k]=Leftarr[i];
+      i++;
+      k++;
+    }
+  while(j<n2)
+    {
+      a[k]=Rightarr[j];
+      j++;
+      k++;
+    }
+}
+
+void Merge_Sort(int a[], int beg, int end)
+{
+  if(beg<end)
+  {
+    int mid= (beg+end)/2;
+    Merge_Sort(a,beg,mid);
+    Merge_Sort(a,mid+1,end);
+    Merge(a,beg,mid,end);
+  }
+}
+
+void printArray(int a[], int n)
+{
+ for(int i=0;i<n;i++)
+   {
+     printf("%d ",a[i]);
+   }
+  printf("\n");
+}
+
+
+int main(void) 
+{
+  int a[50],n;
+  printf("Enter the size of the array:\n");
+  scanf("%d",&n);
+  printf("Enter the array elements:\n");
+  {
+    for(int i=0;i<n;i++)
+      {
+        scanf("%d",&a[i]);
+      }
+  }
+  printf("Array before sorting:\n");
+  printArray(a,n);
+  Merge_Sort(a,0,n-1);
+  printf("Array after the sorted order:\n");
+  printArray(a,n);
+  return 0;
+}
